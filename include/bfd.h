@@ -90,11 +90,11 @@ extern "C" {
 /* The word size of the default bfd target.  */
 #define BFD_DEFAULT_TARGET_SIZE 64
 
-#define BFD_HOST_64BIT_LONG 0
-#define BFD_HOST_64BIT_LONG_LONG 1
+#define BFD_HOST_64BIT_LONG 1
+#define BFD_HOST_64BIT_LONG_LONG 0
 #if 1
-#define BFD_HOST_64_BIT long long
-#define BFD_HOST_U_64_BIT unsigned long long
+#define BFD_HOST_64_BIT long
+#define BFD_HOST_U_64_BIT unsigned long
 typedef BFD_HOST_64_BIT bfd_int64_t;
 typedef BFD_HOST_U_64_BIT bfd_uint64_t;
 #endif

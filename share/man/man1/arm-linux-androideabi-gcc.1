@@ -124,7 +124,7 @@
 .\" ========================================================================
 .\"
 .IX Title "GCC 1"
-.TH GCC 1 "2013-09-03" "gcc-4.7.4" "GNU"
+.TH GCC 1 "2013-11-11" "gcc-4.7.4" "GNU"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -433,7 +433,7 @@ in the following sections.
 \&\-funit\-at\-a\-time \-funroll\-all\-loops \-funroll\-loops 
 \&\-funsafe\-loop\-optimizations \-funsafe\-math\-optimizations \-funswitch\-loops 
 \&\-fvariable\-expansion\-in\-unroller \-fvect\-cost\-model \-fvpt \-fweb 
-\&\-fwhole\-program \-fwpa \-fuse\-linker\-plugin 
+\&\-fwhole\-program \-fuse\-ld \-fwpa \-fuse\-linker\-plugin 
 \&\-\-param\fR \fIname\fR\fB=\fR\fIvalue\fR
 \&\fB\-O  \-O0  \-O1  \-O2  \-O3  \-Os \-Ofast\fR
 .IP "\fIPreprocessor Options\fR" 4
@@ -7357,6 +7357,19 @@ This pass only applies to certain targets that cannot explicitly represent
 the comparison operation before register allocation is complete.
 .Sp
 Enabled at levels \fB\-O\fR, \fB\-O2\fR, \fB\-O3\fR, \fB\-Os\fR.
+.IP "\fB\-fuse\-ld=gold\fR" 4
+.IX Item "-fuse-ld=gold"
+Use the \fBgold\fR linker instead of the default linker.
+This option is only necessary if \s-1GCC\s0 has been configured with
+\&\fB\-\-enable\-gold\fR and \fB\-\-enable\-ld=default\fR.
+.IP "\fB\-fuse\-ld=mcld\fR" 4
+.IX Item "-fuse-ld=mcld"
+Use the \fBmclinker\fR instead of the default linker.
+.IP "\fB\-fuse\-ld=bfd\fR" 4
+.IX Item "-fuse-ld=bfd"
+Use the \fBld.bfd\fR linker instead of the default linker.
+This option is only necessary if \s-1GCC\s0 has been configured with
+\&\fB\-\-enable\-gold\fR and \fB\-\-enable\-ld\fR.
 .IP "\fB\-fcprop\-registers\fR" 4
 .IX Item "-fcprop-registers"
 After register allocation and post-register allocation instruction splitting,
