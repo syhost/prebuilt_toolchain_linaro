@@ -124,7 +124,7 @@
 .\" ========================================================================
 .\"
 .IX Title "GCC 1"
-.TH GCC 1 "2013-09-02" "gcc-4.8.2" "GNU"
+.TH GCC 1 "2013-11-11" "gcc-4.8.3" "GNU"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -10348,6 +10348,9 @@ modifiers.
 .PP
 Feature modifiers used with \fB\-march\fR and \fB\-mcpu\fR can be one
 the following:
+.IP "\fBcrc\fR" 4
+.IX Item "crc"
+Enable \s-1CRC\s0 extension.
 .IP "\fBcrypto\fR" 4
 .IX Item "crypto"
 Enable Crypto extension.  This implies Advanced \s-1SIMD\s0 is enabled.
