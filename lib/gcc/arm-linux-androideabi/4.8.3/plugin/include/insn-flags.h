@@ -77,6 +77,12 @@
 #define HAVE_load_tp_hard (TARGET_HARD_TP)
 #define HAVE_load_tp_soft (TARGET_SOFT_TP)
 #define HAVE_tlscall (TARGET_GNU2_TLS)
+#define HAVE_crc32b (TARGET_CRC32)
+#define HAVE_crc32h (TARGET_CRC32)
+#define HAVE_crc32w (TARGET_CRC32)
+#define HAVE_crc32cb (TARGET_CRC32)
+#define HAVE_crc32ch (TARGET_CRC32)
+#define HAVE_crc32cw (TARGET_CRC32)
 #define HAVE_tbcstv8qi (TARGET_REALLY_IWMMXT)
 #define HAVE_tbcstv4hi (TARGET_REALLY_IWMMXT)
 #define HAVE_tbcstv2si (TARGET_REALLY_IWMMXT)
@@ -1257,6 +1263,21 @@
 #define HAVE_neon_vabdv2sf_3 (TARGET_NEON && (!true || flag_unsafe_math_optimizations))
 #define HAVE_neon_vabdv4sf_3 (TARGET_NEON && (!true || flag_unsafe_math_optimizations))
 #define HAVE_neon_vabdv2di_3 (TARGET_NEON && (!false || flag_unsafe_math_optimizations))
+#define HAVE_crypto_aesmc (TARGET_CRYPTO)
+#define HAVE_crypto_aesimc (TARGET_CRYPTO)
+#define HAVE_crypto_aesd (TARGET_CRYPTO)
+#define HAVE_crypto_aese (TARGET_CRYPTO)
+#define HAVE_crypto_sha1su1 (TARGET_CRYPTO)
+#define HAVE_crypto_sha256su0 (TARGET_CRYPTO)
+#define HAVE_crypto_sha1su0 (TARGET_CRYPTO)
+#define HAVE_crypto_sha256h (TARGET_CRYPTO)
+#define HAVE_crypto_sha256h2 (TARGET_CRYPTO)
+#define HAVE_crypto_sha256su1 (TARGET_CRYPTO)
+#define HAVE_crypto_sha1h (TARGET_CRYPTO)
+#define HAVE_crypto_vmullp64 (TARGET_CRYPTO)
+#define HAVE_crypto_sha1c (TARGET_CRYPTO)
+#define HAVE_crypto_sha1m (TARGET_CRYPTO)
+#define HAVE_crypto_sha1p (TARGET_CRYPTO)
 #define HAVE_atomic_loadqi (TARGET_HAVE_LDACQ)
 #define HAVE_atomic_loadhi (TARGET_HAVE_LDACQ)
 #define HAVE_atomic_loadsi (TARGET_HAVE_LDACQ)
@@ -2159,31 +2180,42 @@
 #define HAVE_neon_vreinterpretdiv2si (TARGET_NEON)
 #define HAVE_neon_vreinterpretdiv2sf (TARGET_NEON)
 #define HAVE_neon_vreinterpretdidi (TARGET_NEON)
+#define HAVE_neon_vreinterprettiv16qi (TARGET_NEON)
+#define HAVE_neon_vreinterprettiv8hi (TARGET_NEON)
+#define HAVE_neon_vreinterprettiv4si (TARGET_NEON)
+#define HAVE_neon_vreinterprettiv4sf (TARGET_NEON)
+#define HAVE_neon_vreinterprettiv2di (TARGET_NEON)
+#define HAVE_neon_vreinterprettiti (TARGET_NEON)
 #define HAVE_neon_vreinterpretv16qiv16qi (TARGET_NEON)
 #define HAVE_neon_vreinterpretv16qiv8hi (TARGET_NEON)
 #define HAVE_neon_vreinterpretv16qiv4si (TARGET_NEON)
 #define HAVE_neon_vreinterpretv16qiv4sf (TARGET_NEON)
 #define HAVE_neon_vreinterpretv16qiv2di (TARGET_NEON)
+#define HAVE_neon_vreinterpretv16qiti (TARGET_NEON)
 #define HAVE_neon_vreinterpretv8hiv16qi (TARGET_NEON)
 #define HAVE_neon_vreinterpretv8hiv8hi (TARGET_NEON)
 #define HAVE_neon_vreinterpretv8hiv4si (TARGET_NEON)
 #define HAVE_neon_vreinterpretv8hiv4sf (TARGET_NEON)
 #define HAVE_neon_vreinterpretv8hiv2di (TARGET_NEON)
+#define HAVE_neon_vreinterpretv8hiti (TARGET_NEON)
 #define HAVE_neon_vreinterpretv4siv16qi (TARGET_NEON)
 #define HAVE_neon_vreinterpretv4siv8hi (TARGET_NEON)
 #define HAVE_neon_vreinterpretv4siv4si (TARGET_NEON)
 #define HAVE_neon_vreinterpretv4siv4sf (TARGET_NEON)
 #define HAVE_neon_vreinterpretv4siv2di (TARGET_NEON)
+#define HAVE_neon_vreinterpretv4siti (TARGET_NEON)
 #define HAVE_neon_vreinterpretv4sfv16qi (TARGET_NEON)
 #define HAVE_neon_vreinterpretv4sfv8hi (TARGET_NEON)
 #define HAVE_neon_vreinterpretv4sfv4si (TARGET_NEON)
 #define HAVE_neon_vreinterpretv4sfv4sf (TARGET_NEON)
 #define HAVE_neon_vreinterpretv4sfv2di (TARGET_NEON)
+#define HAVE_neon_vreinterpretv4sfti (TARGET_NEON)
 #define HAVE_neon_vreinterpretv2div16qi (TARGET_NEON)
 #define HAVE_neon_vreinterpretv2div8hi (TARGET_NEON)
 #define HAVE_neon_vreinterpretv2div4si (TARGET_NEON)
 #define HAVE_neon_vreinterpretv2div4sf (TARGET_NEON)
 #define HAVE_neon_vreinterpretv2div2di (TARGET_NEON)
+#define HAVE_neon_vreinterpretv2diti (TARGET_NEON)
 #define HAVE_vec_load_lanesv8qiv8qi (TARGET_NEON)
 #define HAVE_vec_load_lanesv16qiv16qi (TARGET_NEON)
 #define HAVE_vec_load_lanesv4hiv4hi (TARGET_NEON)
@@ -2495,6 +2527,12 @@ extern rtx        gen_thumb_eh_return                   (rtx);
 extern rtx        gen_load_tp_hard                      (rtx);
 extern rtx        gen_load_tp_soft                      (void);
 extern rtx        gen_tlscall                           (rtx, rtx);
+extern rtx        gen_crc32b                            (rtx, rtx, rtx);
+extern rtx        gen_crc32h                            (rtx, rtx, rtx);
+extern rtx        gen_crc32w                            (rtx, rtx, rtx);
+extern rtx        gen_crc32cb                           (rtx, rtx, rtx);
+extern rtx        gen_crc32ch                           (rtx, rtx, rtx);
+extern rtx        gen_crc32cw                           (rtx, rtx, rtx);
 extern rtx        gen_tbcstv8qi                         (rtx, rtx);
 extern rtx        gen_tbcstv4hi                         (rtx, rtx);
 extern rtx        gen_tbcstv2si                         (rtx, rtx);
@@ -3671,6 +3709,21 @@ extern rtx        gen_neon_vabdv4si_3                   (rtx, rtx, rtx);
 extern rtx        gen_neon_vabdv2sf_3                   (rtx, rtx, rtx);
 extern rtx        gen_neon_vabdv4sf_3                   (rtx, rtx, rtx);
 extern rtx        gen_neon_vabdv2di_3                   (rtx, rtx, rtx);
+extern rtx        gen_crypto_aesmc                      (rtx, rtx);
+extern rtx        gen_crypto_aesimc                     (rtx, rtx);
+extern rtx        gen_crypto_aesd                       (rtx, rtx, rtx);
+extern rtx        gen_crypto_aese                       (rtx, rtx, rtx);
+extern rtx        gen_crypto_sha1su1                    (rtx, rtx, rtx);
+extern rtx        gen_crypto_sha256su0                  (rtx, rtx, rtx);
+extern rtx        gen_crypto_sha1su0                    (rtx, rtx, rtx, rtx);
+extern rtx        gen_crypto_sha256h                    (rtx, rtx, rtx, rtx);
+extern rtx        gen_crypto_sha256h2                   (rtx, rtx, rtx, rtx);
+extern rtx        gen_crypto_sha256su1                  (rtx, rtx, rtx, rtx);
+extern rtx        gen_crypto_sha1h                      (rtx, rtx, rtx);
+extern rtx        gen_crypto_vmullp64                   (rtx, rtx, rtx);
+extern rtx        gen_crypto_sha1c                      (rtx, rtx, rtx, rtx, rtx);
+extern rtx        gen_crypto_sha1m                      (rtx, rtx, rtx, rtx, rtx);
+extern rtx        gen_crypto_sha1p                      (rtx, rtx, rtx, rtx, rtx);
 extern rtx        gen_atomic_loadqi                     (rtx, rtx, rtx);
 extern rtx        gen_atomic_loadhi                     (rtx, rtx, rtx);
 extern rtx        gen_atomic_loadsi                     (rtx, rtx, rtx);
@@ -4424,31 +4477,42 @@ extern rtx        gen_neon_vreinterpretdiv4hi           (rtx, rtx);
 extern rtx        gen_neon_vreinterpretdiv2si           (rtx, rtx);
 extern rtx        gen_neon_vreinterpretdiv2sf           (rtx, rtx);
 extern rtx        gen_neon_vreinterpretdidi             (rtx, rtx);
+extern rtx        gen_neon_vreinterprettiv16qi          (rtx, rtx);
+extern rtx        gen_neon_vreinterprettiv8hi           (rtx, rtx);
+extern rtx        gen_neon_vreinterprettiv4si           (rtx, rtx);
+extern rtx        gen_neon_vreinterprettiv4sf           (rtx, rtx);
+extern rtx        gen_neon_vreinterprettiv2di           (rtx, rtx);
+extern rtx        gen_neon_vreinterprettiti             (rtx, rtx);
 extern rtx        gen_neon_vreinterpretv16qiv16qi       (rtx, rtx);
 extern rtx        gen_neon_vreinterpretv16qiv8hi        (rtx, rtx);
 extern rtx        gen_neon_vreinterpretv16qiv4si        (rtx, rtx);
 extern rtx        gen_neon_vreinterpretv16qiv4sf        (rtx, rtx);
 extern rtx        gen_neon_vreinterpretv16qiv2di        (rtx, rtx);
+extern rtx        gen_neon_vreinterpretv16qiti          (rtx, rtx);
 extern rtx        gen_neon_vreinterpretv8hiv16qi        (rtx, rtx);
 extern rtx        gen_neon_vreinterpretv8hiv8hi         (rtx, rtx);
 extern rtx        gen_neon_vreinterpretv8hiv4si         (rtx, rtx);
 extern rtx        gen_neon_vreinterpretv8hiv4sf         (rtx, rtx);
 extern rtx        gen_neon_vreinterpretv8hiv2di         (rtx, rtx);
+extern rtx        gen_neon_vreinterpretv8hiti           (rtx, rtx);
 extern rtx        gen_neon_vreinterpretv4siv16qi        (rtx, rtx);
 extern rtx        gen_neon_vreinterpretv4siv8hi         (rtx, rtx);
 extern rtx        gen_neon_vreinterpretv4siv4si         (rtx, rtx);
 extern rtx        gen_neon_vreinterpretv4siv4sf         (rtx, rtx);
 extern rtx        gen_neon_vreinterpretv4siv2di         (rtx, rtx);
+extern rtx        gen_neon_vreinterpretv4siti           (rtx, rtx);
 extern rtx        gen_neon_vreinterpretv4sfv16qi        (rtx, rtx);
 extern rtx        gen_neon_vreinterpretv4sfv8hi         (rtx, rtx);
 extern rtx        gen_neon_vreinterpretv4sfv4si         (rtx, rtx);
 extern rtx        gen_neon_vreinterpretv4sfv4sf         (rtx, rtx);
 extern rtx        gen_neon_vreinterpretv4sfv2di         (rtx, rtx);
+extern rtx        gen_neon_vreinterpretv4sfti           (rtx, rtx);
 extern rtx        gen_neon_vreinterpretv2div16qi        (rtx, rtx);
 extern rtx        gen_neon_vreinterpretv2div8hi         (rtx, rtx);
 extern rtx        gen_neon_vreinterpretv2div4si         (rtx, rtx);
 extern rtx        gen_neon_vreinterpretv2div4sf         (rtx, rtx);
 extern rtx        gen_neon_vreinterpretv2div2di         (rtx, rtx);
+extern rtx        gen_neon_vreinterpretv2diti           (rtx, rtx);
 extern rtx        gen_vec_load_lanesv8qiv8qi            (rtx, rtx);
 extern rtx        gen_vec_load_lanesv16qiv16qi          (rtx, rtx);
 extern rtx        gen_vec_load_lanesv4hiv4hi            (rtx, rtx);

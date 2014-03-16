@@ -1,5 +1,5 @@
 /* Generated automatically by the program 'build/genpreds'
-   from the machine description file '/mnt/jenkins/workspace/linaro-android_toolchain-4.8-2013.11/build/objdir/../build/../gcc/gcc-linaro-4.8-2013.11/gcc/config/arm/arm.md'.  */
+   from the machine description file '/mnt/jenkins/workspace/linaro-android_toolchain-4.8-2014.02/build/objdir/../build/../gcc/gcc-linaro-4.8-2014.02/gcc/config/arm/arm.md'.  */
 
 #ifndef GCC_TM_PREDS_H
 #define GCC_TM_PREDS_H
@@ -26,11 +26,12 @@ extern int imm_for_neon_inv_logic_operand (rtx, enum machine_mode);
 extern int neon_inv_logic_op2 (rtx, enum machine_mode);
 extern int imm_for_neon_logic_operand (rtx, enum machine_mode);
 extern int neon_logic_op2 (rtx, enum machine_mode);
-extern int arm_hard_register_operand (rtx, enum machine_mode);
+extern int arm_hard_general_register_operand (rtx, enum machine_mode);
 extern int low_register_operand (rtx, enum machine_mode);
 extern int low_reg_or_int_operand (rtx, enum machine_mode);
 extern int arm_general_register_operand (rtx, enum machine_mode);
 extern int vfp_register_operand (rtx, enum machine_mode);
+extern int vfp_hard_register_operand (rtx, enum machine_mode);
 extern int zero_operand (rtx, enum machine_mode);
 extern int reg_or_zero_operand (rtx, enum machine_mode);
 extern int subreg_lowpart_operator (rtx, enum machine_mode);

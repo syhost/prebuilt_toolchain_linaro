@@ -124,7 +124,7 @@
 .\" ========================================================================
 .\"
 .IX Title "GCC 1"
-.TH GCC 1 "2013-11-11" "gcc-4.8.3" "GNU"
+.TH GCC 1 "2014-02-03" "gcc-4.8.3" "GNU"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -190,7 +190,7 @@ in the following sections.
 \&\-pipe  \-pass\-exit\-codes  
 \&\-x\fR \fIlanguage\fR  \fB\-v  \-###  \-\-help\fR[\fB=\fR\fIclass\fR[\fB,...\fR]]  \fB\-\-target\-help  
 \&\-\-version \-wrapper @\fR\fIfile\fR \fB\-fplugin=\fR\fIfile\fR \fB\-fplugin\-arg\-\fR\fIname\fR\fB=\fR\fIarg\fR  
-\&\fB\-fdump\-ada\-spec\fR[\fB\-slim\fR] \fB\-fada\-spec\-parent=\fR\fIarg\fR \fB\-fdump\-go\-spec=\fR\fIfile\fR
+\&\fB\-fdump\-ada\-spec\fR[\fB\-slim\fR] \fB\-fada\-spec\-parent=\fR\fIunit\fR \fB\-fdump\-go\-spec=\fR\fIfile\fR
 .IP "\fIC Language Options\fR" 4
 .IX Item "C Language Options"
 \&\fB\-ansi  \-std=\fR\fIstandard\fR  \fB\-fgnu89\-inline 
@@ -250,7 +250,6 @@ in the following sections.
 .IX Item "Language Independent Options"
 \&\fB\-fmessage\-length=\fR\fIn\fR  
 \&\fB\-fdiagnostics\-show\-location=\fR[\fBonce\fR|\fBevery-line\fR]  
-\&\fB\-fdiagnostics\-color=\fR[\fBauto\fR|\fBnever\fR|\fBalways\fR]  
 \&\fB\-fno\-diagnostics\-show\-option \-fno\-diagnostics\-show\-caret\fR
 .IP "\fIWarning Options\fR" 4
 .IX Item "Warning Options"
@@ -440,7 +439,7 @@ in the following sections.
 \&\-ftree\-parallelize\-loops=\fR\fIn\fR \fB\-ftree\-pre \-ftree\-partial\-pre \-ftree\-pta 
 \&\-ftree\-reassoc \-ftree\-sink \-ftree\-slsr \-ftree\-sra 
 \&\-ftree\-switch\-conversion \-ftree\-tail\-merge 
-\&\-ftree\-ter \-ftree\-vect\-loop\-version \-ftree\-vectorize \-ftree\-vrp 
+\&\-ftree\-ter \-ftree\-vectorize \-ftree\-vrp 
 \&\-funit\-at\-a\-time \-funroll\-all\-loops \-funroll\-loops 
 \&\-funsafe\-loop\-optimizations \-funsafe\-math\-optimizations \-funswitch\-loops 
 \&\-fvariable\-expansion\-in\-unroller \-fvect\-cost\-model \-fvpt \-fweb 
@@ -894,7 +893,8 @@ See \s-1RS/6000\s0 and PowerPC Options.
 \&\-msmall\-exec  \-mno\-small\-exec  \-mmvcle \-mno\-mvcle 
 \&\-m64  \-m31  \-mdebug  \-mno\-debug  \-mesa  \-mzarch 
 \&\-mtpf\-trace \-mno\-tpf\-trace  \-mfused\-madd  \-mno\-fused\-madd 
-\&\-mwarn\-framesize  \-mwarn\-dynamicstack  \-mstack\-size \-mstack\-guard\fR
+\&\-mwarn\-framesize  \-mwarn\-dynamicstack  \-mstack\-size \-mstack\-guard 
+\&\-mhotpatch[=\fR\fIhalfwords\fR\fB] \-mno\-hotpatch\fR
 .Sp
 \&\fIScore Options\fR
 \&\fB\-meb \-mel 
@@ -943,7 +943,7 @@ See \s-1RS/6000\s0 and PowerPC Options.
 \&\-mvis2  \-mno\-vis2  \-mvis3  \-mno\-vis3 
 \&\-mcbcond \-mno\-cbcond 
 \&\-mfmaf  \-mno\-fmaf  \-mpopc  \-mno\-popc 
-\&\-mfix\-at697f\fR
+\&\-mfix\-at697f \-mfix\-ut699\fR
 .Sp
 \&\fI\s-1SPU\s0 Options\fR
 \&\fB\-mwarn\-reloc \-merror\-reloc 
@@ -1462,8 +1462,11 @@ Define an argument called \fIkey\fR with a value of \fIvalue\fR
 for the plugin called \fIname\fR.
 .IP "\fB\-fdump\-ada\-spec\fR[\fB\-slim\fR]" 4
 .IX Item "-fdump-ada-spec[-slim]"
-For C and \*(C+ source and include files, generate corresponding Ada
-specs.
+For C and \*(C+ source and include files, generate corresponding Ada specs.
+.IP "\fB\-fada\-spec\-parent=\fR\fIunit\fR" 4
+.IX Item "-fada-spec-parent=unit"
+In conjunction with \fB\-fdump\-ada\-spec\fR[\fB\-slim\fR] above, generate
+Ada specs as child units of parent \fIunit\fR.
 .IP "\fB\-fdump\-go\-spec=\fR\fIfile\fR" 4
 .IX Item "-fdump-go-spec=file"
 For input files in any language, generate corresponding Go
@@ -2792,79 +2795,6 @@ Only meaningful in line-wrapping mode.  Instructs the diagnostic
 messages reporter to emit the same source location information (as
 prefix) for physical lines that result from the process of breaking
 a message which is too long to fit on a single line.
-.IP "\fB\-fdiagnostics\-color[=\fR\fI\s-1WHEN\s0\fR\fB]\fR" 4
-.IX Item "-fdiagnostics-color[=WHEN]"
-.PD 0
-.IP "\fB\-fno\-diagnostics\-color\fR" 4
-.IX Item "-fno-diagnostics-color"
-.PD
-Use color in diagnostics.  \fI\s-1WHEN\s0\fR is \fBnever\fR, \fBalways\fR,
-or \fBauto\fR.  The default is \fBnever\fR if \fB\s-1GCC_COLORS\s0\fR environment
-variable isn't present in the environment, and \fBauto\fR otherwise.
-\&\fBauto\fR means to use color only when the standard error is a terminal.
-The forms \fB\-fdiagnostics\-color\fR and \fB\-fno\-diagnostics\-color\fR are
-aliases for \fB\-fdiagnostics\-color=always\fR and
-\&\fB\-fdiagnostics\-color=never\fR, respectively.
-.Sp
-The colors are defined by the environment variable \fB\s-1GCC_COLORS\s0\fR.
-Its value is a colon-separated list of capabilities and Select Graphic
-Rendition (\s-1SGR\s0) substrings. \s-1SGR\s0 commands are interpreted by the
-terminal or terminal emulator.  (See the section in the documentation
-of your text terminal for permitted values and their meanings as
-character attributes.)  These substring values are integers in decimal
-representation and can be concatenated with semicolons.
-Common values to concatenate include
-\&\fB1\fR for bold,
-\&\fB4\fR for underline,
-\&\fB5\fR for blink,
-\&\fB7\fR for inverse,
-\&\fB39\fR for default foreground color,
-\&\fB30\fR to \fB37\fR for foreground colors,
-\&\fB90\fR to \fB97\fR for 16\-color mode foreground colors,
-\&\fB38;5;0\fR to \fB38;5;255\fR
-for 88\-color and 256\-color modes foreground colors,
-\&\fB49\fR for default background color,
-\&\fB40\fR to \fB47\fR for background colors,
-\&\fB100\fR to \fB107\fR for 16\-color mode background colors,
-and \fB48;5;0\fR to \fB48;5;255\fR
-for 88\-color and 256\-color modes background colors.
-.Sp
-The default \fB\s-1GCC_COLORS\s0\fR is
-\&\fBerror=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01\fR
-where \fB01;31\fR is bold red, \fB01;35\fR is bold magenta,
-\&\fB01;36\fR is bold cyan, \fB01;32\fR is bold green and
-\&\fB01\fR is bold. Setting \fB\s-1GCC_COLORS\s0\fR to the empty
-string disables colors.
-Supported capabilities are as follows.
-.RS 4
-.ie n .IP """error=""" 4
-.el .IP "\f(CWerror=\fR" 4
-.IX Item "error="
-\&\s-1SGR\s0 substring for error: markers.
-.ie n .IP """warning=""" 4
-.el .IP "\f(CWwarning=\fR" 4
-.IX Item "warning="
-\&\s-1SGR\s0 substring for warning: markers.
-.ie n .IP """note=""" 4
-.el .IP "\f(CWnote=\fR" 4
-.IX Item "note="
-\&\s-1SGR\s0 substring for note: markers.
-.ie n .IP """caret=""" 4
-.el .IP "\f(CWcaret=\fR" 4
-.IX Item "caret="
-\&\s-1SGR\s0 substring for caret line.
-.ie n .IP """locus=""" 4
-.el .IP "\f(CWlocus=\fR" 4
-.IX Item "locus="
-\&\s-1SGR\s0 substring for location information, \fBfile:line\fR or
-\&\fBfile:line:column\fR etc.
-.ie n .IP """quote=""" 4
-.el .IP "\f(CWquote=\fR" 4
-.IX Item "quote="
-\&\s-1SGR\s0 substring for information printed within quotes.
-.RE
-.RS 4
-.RE
 .IP "\fB\-fno\-diagnostics\-show\-option\fR" 4
 .IX Item "-fno-diagnostics-show-option"
 By default, each diagnostic emitted includes text indicating the
@@ -6075,7 +6005,7 @@ optimizations designed to reduce code size.
 \&\fB\-Os\fR disables the following optimization flags:
 \&\fB\-falign\-functions  \-falign\-jumps  \-falign\-loops 
 \&\-falign\-labels  \-freorder\-blocks  \-freorder\-blocks\-and\-partition 
-\&\-fprefetch\-loop\-arrays  \-ftree\-vect\-loop\-version\fR
+\&\-fprefetch\-loop\-arrays\fR
 .IP "\fB\-Ofast\fR" 4
 .IX Item "-Ofast"
 Disregard strict standards compliance.  \fB\-Ofast\fR enables all
@@ -7218,18 +7148,20 @@ Perform loop vectorization on trees. This flag is enabled by default at
 .IX Item "-ftree-slp-vectorize"
 Perform basic block vectorization on trees. This flag is enabled by default at
 \&\fB\-O3\fR and when \fB\-ftree\-vectorize\fR is enabled.
-.IP "\fB\-ftree\-vect\-loop\-version\fR" 4
-.IX Item "-ftree-vect-loop-version"
-Perform loop versioning when doing loop vectorization on trees.  When a loop
-appears to be vectorizable except that data alignment or data dependence cannot
-be determined at compile time, then vectorized and non-vectorized versions of
-the loop are generated along with run-time checks for alignment or dependence
-to control which version is executed.  This option is enabled by default
-except at level \fB\-Os\fR where it is disabled.
-.IP "\fB\-fvect\-cost\-model\fR" 4
-.IX Item "-fvect-cost-model"
-Enable cost model for vectorization.  This option is enabled by default at
-\&\fB\-O3\fR.
+.IP "\fB\-fvect\-cost\-model=\fR\fImodel\fR" 4
+.IX Item "-fvect-cost-model=model"
+Alter the cost model used for vectorization.  The \fImodel\fR argument
+should be one of \f(CW\*(C`unlimited\*(C'\fR, \f(CW\*(C`dynamic\*(C'\fR or \f(CW\*(C`cheap\*(C'\fR.
+With the \f(CW\*(C`unlimited\*(C'\fR model the vectorized code-path is assumed
+to be profitable while with the \f(CW\*(C`dynamic\*(C'\fR model a runtime check
+will guard the vectorized code-path to enable it only for iteration
+counts that will likely execute faster than when executing the original
+scalar loop.  The \f(CW\*(C`cheap\*(C'\fR model will disable vectorization of
+loops where doing so would be cost prohibitive for example due to
+required runtime checks for data dependence or alignment but otherwise
+is equal to the \f(CW\*(C`dynamic\*(C'\fR model.
+The default cost model depends on other optimization flags and is
+either \f(CW\*(C`dynamic\*(C'\fR or \f(CW\*(C`cheap\*(C'\fR.
 .IP "\fB\-ftree\-vrp\fR" 4
 .IX Item "-ftree-vrp"
 Perform Value Range Propagation on trees.  This is similar to the
@@ -8584,13 +8516,15 @@ constraints.  The default value is 0.
 .IP "\fBvect-max-version-for-alignment-checks\fR" 4
 .IX Item "vect-max-version-for-alignment-checks"
 The maximum number of run-time checks that can be performed when
-doing loop versioning for alignment in the vectorizer.  See option
-\&\fB\-ftree\-vect\-loop\-version\fR for more information.
+doing loop versioning for alignment in the vectorizer.
 .IP "\fBvect-max-version-for-alias-checks\fR" 4
 .IX Item "vect-max-version-for-alias-checks"
 The maximum number of run-time checks that can be performed when
-doing loop versioning for alias in the vectorizer.  See option
-\&\fB\-ftree\-vect\-loop\-version\fR for more information.
+doing loop versioning for alias in the vectorizer.
+.IP "\fBvect-max-peeling-for-alignment\fR" 4
+.IX Item "vect-max-peeling-for-alignment"
+The maximum number of loop peels to enhance access alignment
+for vectorizer. Value \-1 means 'no limit'.
 .IP "\fBmax-iterations-to-track\fR" 4
 .IX Item "max-iterations-to-track"
 The maximum number of iterations of a loop the brute-force algorithm
@@ -10644,8 +10578,11 @@ of the \fB\-mcpu=\fR option.  Permissible names are: \fBarmv2\fR,
 \&\fBarmv6\fR, \fBarmv6j\fR,
 \&\fBarmv6t2\fR, \fBarmv6z\fR, \fBarmv6zk\fR, \fBarmv6\-m\fR,
 \&\fBarmv7\fR, \fBarmv7\-a\fR, \fBarmv7\-r\fR, \fBarmv7\-m\fR,
-\&\fBarmv8\-a\fR,
+\&\fBarmv8\-a\fR, \fBarmv8\-a+crc\fR,
 \&\fBiwmmxt\fR, \fBiwmmxt2\fR, \fBep9312\fR.
+.Sp
+\&\fB\-march=armv8\-a+crc\fR enables code generation for the ARMv8\-A
+architecture together with the optional \s-1CRC32\s0 extensions.
 .Sp
 \&\fB\-march=native\fR causes the compiler to auto-detect the architecture
 of the build computer.  At present, this feature is only supported on
@@ -10731,8 +10668,11 @@ responsible for initializing this register with an appropriate value
 before execution begins.
 .IP "\fB\-mpic\-register=\fR\fIreg\fR" 4
 .IX Item "-mpic-register=reg"
-Specify the register to be used for \s-1PIC\s0 addressing.  The default is R10
-unless stack-checking is enabled, when R9 is used.
+Specify the register to be used for \s-1PIC\s0 addressing.
+For standard \s-1PIC\s0 base case, the default will be any suitable register
+determined by compiler.  For single \s-1PIC\s0 base case, the default is
+\&\fBR9\fR if target is \s-1EABI\s0 based or stack-checking is enabled,
+otherwise the default is \fBR10\fR.
 .IP "\fB\-mpoke\-function\-name\fR" 4
 .IX Item "-mpoke-function-name"
 Write the name of each function into the text section, directly
@@ -17611,6 +17551,23 @@ values have to be exact powers of 2 and \fIstack-size\fR has to be greater than
 In order to be efficient the extra code makes the assumption that the stack starts
 at an address aligned to the value given by \fIstack-size\fR.
 The \fIstack-guard\fR option can only be used in conjunction with \fIstack-size\fR.
+.IP "\fB\-mhotpatch[=\fR\fIhalfwords\fR\fB]\fR" 4
+.IX Item "-mhotpatch[=halfwords]"
+.PD 0
+.IP "\fB\-mno\-hotpatch\fR" 4
+.IX Item "-mno-hotpatch"
+.PD
+If the hotpatch option is enabled, a \*(L"hot-patching\*(R" function
+prologue is generated for all functions in the compilation unit.
+The funtion label is prepended with the given number of two-byte
+Nop instructions (\fIhalfwords\fR, maximum 1000000) or 12 Nop
+instructions if no argument is present.  Functions with a
+hot-patching prologue are never inlined automatically, and a
+hot-patching prologue is never generated for functions functions
+that are explicitly inline.
+.Sp
+This option can be overridden for individual functions with the
+\&\f(CW\*(C`hotpatch\*(C'\fR attribute.
 .PP
 \fIScore Options\fR
 .IX Subsection "Score Options"
@@ -18232,10 +18189,10 @@ the rules of the \s-1ABI\s0.
 Set the instruction set, register set, and instruction scheduling parameters
 for machine type \fIcpu_type\fR.  Supported values for \fIcpu_type\fR are
 \&\fBv7\fR, \fBcypress\fR, \fBv8\fR, \fBsupersparc\fR, \fBhypersparc\fR,
-\&\fBleon\fR, \fBsparclite\fR, \fBf930\fR, \fBf934\fR, \fBsparclite86x\fR,
-\&\fBsparclet\fR, \fBtsc701\fR, \fBv9\fR, \fBultrasparc\fR,
-\&\fBultrasparc3\fR, \fBniagara\fR, \fBniagara2\fR, \fBniagara3\fR,
-and \fBniagara4\fR.
+\&\fBleon\fR, \fBleon3\fR, \fBsparclite\fR, \fBf930\fR, \fBf934\fR,
+\&\fBsparclite86x\fR, \fBsparclet\fR, \fBtsc701\fR, \fBv9\fR,
+\&\fBultrasparc\fR, \fBultrasparc3\fR, \fBniagara\fR, \fBniagara2\fR,
+\&\fBniagara3\fR and \fBniagara4\fR.
 .Sp
 Native Solaris and GNU/Linux toolchains also support the value \fBnative\fR,
 which selects the best architecture option for the host processor.
@@ -18254,7 +18211,7 @@ implementations.
 cypress
 .IP "v8" 4
 .IX Item "v8"
-supersparc, hypersparc, leon
+supersparc, hypersparc, leon, leon3
 .IP "sparclite" 4
 .IX Item "sparclite"
 f930, f934, sparclite86x
@@ -18317,10 +18274,11 @@ option \fB\-mcpu=\fR\fIcpu_type\fR does.
 The same values for \fB\-mcpu=\fR\fIcpu_type\fR can be used for
 \&\fB\-mtune=\fR\fIcpu_type\fR, but the only useful values are those
 that select a particular \s-1CPU\s0 implementation.  Those are \fBcypress\fR,
-\&\fBsupersparc\fR, \fBhypersparc\fR, \fBleon\fR, \fBf930\fR, \fBf934\fR,
-\&\fBsparclite86x\fR, \fBtsc701\fR, \fBultrasparc\fR, \fBultrasparc3\fR,
-\&\fBniagara\fR, \fBniagara2\fR, \fBniagara3\fR and \fBniagara4\fR.  With
-native Solaris and GNU/Linux toolchains, \fBnative\fR can also be used.
+\&\fBsupersparc\fR, \fBhypersparc\fR, \fBleon\fR, \fBleon3\fR, \fBf930\fR,
+\&\fBf934\fR, \fBsparclite86x\fR, \fBtsc701\fR, \fBultrasparc\fR,
+\&\fBultrasparc3\fR, \fBniagara\fR, \fBniagara2\fR, \fBniagara3\fR and
+\&\fBniagara4\fR.  With native Solaris and GNU/Linux toolchains, \fBnative\fR
+can also be used.
 .IP "\fB\-mv8plus\fR" 4
 .IX Item "-mv8plus"
 .PD 0
@@ -18395,6 +18353,10 @@ later.
 .IX Item "-mfix-at697f"
 Enable the documented workaround for the single erratum of the Atmel \s-1AT697F\s0
 processor (which corresponds to erratum #13 of the \s-1AT697E\s0 processor).
+.IP "\fB\-mfix\-ut699\fR" 4
+.IX Item "-mfix-ut699"
+Enable the documented workarounds for the floating-point errata and the data
+cache nullify errata of the \s-1UT699\s0 processor.
 .PP
 These \fB\-m\fR options are supported in addition to the above
 on \s-1SPARC\-V9\s0 processors in 64\-bit environments:
